@@ -1,0 +1,1946 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "General Transport Operator API Specification",
+    "description" : "General Transport Operator API Specification",
+    "contact" : {
+      "email" : "edoardo.felici@minienm.nl"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.4"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/efel85/GBFS/1.0.4",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "security" : [ {
+    "key" : [ ]
+  } ],
+  "tags" : [ {
+    "name" : "operator information",
+    "description" : "gives information about systems, stations, operating hours [from GBFS]"
+  }, {
+    "name" : "planning",
+    "description" : "gives information about transport asset availability and pricing [free_bike_status and system_pricing_plans in GBFS]"
+  }, {
+    "name" : "booking",
+    "description" : "a booking is the main object exchanged between MaaS and a TSP [from MaaS-API].",
+    "externalDocs" : {
+      "description" : "Booking scenarios",
+      "url" : "https://github.com/maasglobal/maas-tsp-api/blob/master/specs/Booking.md"
+    }
+  }, {
+    "name" : "trip execution",
+    "description" : "provides asset location, grants access or exit from an asset or transport system, offers trip monitoring [addendum]"
+  }, {
+    "name" : "payment",
+    "description" : "arranges financial settlement for legs and trips"
+  }, {
+    "name" : "support",
+    "description" : "support for the user while the trip is being executed"
+  } ],
+  "paths" : {
+    "/system_information" : {
+      "get" : {
+        "tags" : [ "operator information" ],
+        "summary" : "describes the system",
+        "description" : "Describes the system including System operator, System location, year implemented, URLs, contact info, time zone. [from GBFS]",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/system_information"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/system_information"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/station_information" : {
+      "get" : {
+        "tags" : [ "operator information" ],
+        "summary" : "describes all available stations",
+        "description" : "All stations contained in this list are considered public (ie, can be shown on a map for public use). If there are private stations (such as Capital Bikeshare’s White House station) these should not be exposed here and their status should not be included [from GBFS]",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/station_information"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/station_information"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/system_hours" : {
+      "get" : {
+        "tags" : [ "operator information" ],
+        "summary" : "describes the system hours of operation",
+        "description" : "Describes the hours of operation of all available systems of the transport operator [from GBFS]",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/system_hours"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/system_hours"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/system_calendar" : {
+      "get" : {
+        "tags" : [ "operator information" ],
+        "summary" : "describes the operating calendar for a system. An array of year objects defined as follows (if start/end year are omitted, then assume the start and end months do not change from year to year). [from GFBS]",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/system_calendar"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/system_calendar"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/system_regions" : {
+      "get" : {
+        "tags" : [ "operator information" ],
+        "summary" : "describes regions for a system that is broken up by geographic or political region. It is defined as a separate feed to allow for additional region metadata (such as shape definitions). [from GBFS]",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/system_regions"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/system_regions"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/free_asset_status" : {
+      "get" : {
+        "tags" : [ "planning" ],
+        "summary" : "describes asset availability",
+        "description" : "describes assets that are not at a station and are not currently in the middle of an active ride. [free_bike_status in GBFS and amended]",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/free_asset_status"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/free_asset_status"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/system_alerts" : {
+      "get" : {
+        "tags" : [ "operator information" ],
+        "summary" : "informs customers about changes to the system outside of normal operations",
+        "description" : "This feed is intended to inform customers about changes to the system that do not fall within the normal system operations. For example, system closures due to weather would be listed here, but a system that only operated for part of the year would have that schedule listed in the system_calendar.json feed. This file is an array of alert objects defined as below. Obsolete alerts should be removed so the client application can safely present to the end user everything present in the feed. The consumer could use the start/end information to determine if this is a past, ongoing or future alert and adjust the presentation accordingly. [from GBFS]",
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/schemas/system_alerts"
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/system_pricing_plans" : {
+      "get" : {
+        "tags" : [ "operator information" ],
+        "summary" : "gives pricing information",
+        "description" : "Describes pricing of systems or assets [from GBFS]",
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/schemas/system_pricing_plans"
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/bookings/options" : {
+      "get" : {
+        "tags" : [ "booking" ],
+        "description" : "Returns available transport options for given coordinate. Start time can be defined, but is optional. If startTime is not provided, but required by the third party API, a default value of \"Date.now()\" is used. [from MaaS-API /listing]",
+        "parameters" : [ {
+          "name" : "from",
+          "in" : "query",
+          "description" : "User's location in comma separated form e.g. 60.123,27.456",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "pattern" : "^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$",
+            "type" : "string"
+          }
+        }, {
+          "name" : "radius",
+          "in" : "query",
+          "description" : "Maximum distance a user wants to travel to reach asset in metres, e.g. 500 metres",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "to",
+          "in" : "query",
+          "description" : "A desired destination e.g. 60.123,27.456",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "pattern" : "^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Available transport methods matching the given query parameters. If no transport methods are available, an empty array is returned.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/options"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "If coordinates given in the request are invalid the server returns 400 Bad request as a response.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bookings/" : {
+      "get" : {
+        "tags" : [ "booking" ],
+        "description" : "Returns the `Booking` that has been created earlier",
+        "parameters" : [ {
+          "name" : "state",
+          "in" : "query",
+          "description" : "The state of the booking to fetch",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "enum - BOOKED - CANCELLED - PAID - UPDATE_REQUESTED - UPDATED - STARTED - FINISHED"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The bookings matching the query",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "minItems" : 0,
+                  "type" : "array",
+                  "description" : "The bookings that matched the query (zero or more)",
+                  "items" : {
+                    "$ref" : "#/components/schemas/booking"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request (invalid query parameters)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization error (invalid API key)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "x-serverless-endpoint" : "echo~GET"
+      },
+      "post" : {
+        "tags" : [ "booking" ],
+        "description" : "Creates a new `Booking` for the TSP in **booked** state. The returned object will be a reference that is passed back & forth throughout the booking life cycle. The Booking may be modified in the response, e.g. location being adjusted for a more suitable pick-up location. In addition, the service may contain a **meta** attribute for arbitrary TSP metadata that the TSP needs later, and **token** attribute depicting how long the current state is valid.",
+        "parameters" : [ ],
+        "requestBody" : {
+          "description" : "New `Booking` data",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/newBooking"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "A new booking was succesfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/booking"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request (invalid body parameters)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization error (invalid API key)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bookings/{id}" : {
+      "get" : {
+        "tags" : [ "booking" ],
+        "description" : "Returns the `Bookings` that have been created through the system.",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Booking identifier",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The booking was found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/booking"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request (invalid query or body parameters)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization error (invalid API key)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The booking was not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "booking" ],
+        "description" : "Modifies the state of a `Booking`, e.g. **cancels**, **pays** or **reschedules** it. The previous booking information is passed forward as-is for reference.",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Booking identifier",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "New `Booking` data",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/booking"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "The booking was modified",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/booking"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notification/{id}" : {
+      "get" : {
+        "tags" : [ "trip execution" ],
+        "description" : "notification between MaaS provider and Transport operator in case of user no-show or if specific asset is not available [addendum]",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Booking identifier",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "notifications available for given booking identifier",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/notification"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request (invalid query or body parameters)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization error (invalid API key)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The booking was not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/provide_location/{id}" : {
+      "get" : {
+        "tags" : [ "trip execution" ],
+        "description" : "provides location of specific asset related to a booking",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Booking identifier",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "asset location provided",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/options_coordinates"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request (invalid query or body parameters)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization error (invalid API key)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The booking was not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/request_access/{id}" : {
+      "put" : {
+        "tags" : [ "trip execution" ],
+        "description" : "provides access to an asset or transport system",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Booking identifier",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "access granted"
+          },
+          "400" : {
+            "description" : "Bad request (invalid query or body parameters)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization error (invalid API key)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The booking was not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/request_exit/{id}" : {
+      "put" : {
+        "tags" : [ "trip execution" ],
+        "description" : "provides exit from an asset or transport system",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Booking identifier",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "exit granted"
+          },
+          "400" : {
+            "description" : "Bad request (invalid query or body parameters)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization error (invalid API key)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The booking was not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/monitor_trip/{id}" : {
+      "get" : {
+        "tags" : [ "trip execution" ],
+        "description" : "monitors the current location of the asset and duration & distance of the trip",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Booking identifier",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "operation successful",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/monitor"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request (invalid query or body parameters)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization error (invalid API key)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The booking was not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leg_summary/{id}" : {
+      "get" : {
+        "tags" : [ "trip execution" ],
+        "description" : "generates a summary of the specific leg",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Booking identifier",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "operation successful",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/leg"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request (invalid query or body parameters)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization error (invalid API key)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The booking was not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/support_request/{id}" : {
+      "put" : {
+        "tags" : [ "support" ],
+        "description" : "identifies a request for support from user via MSP",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Booking identifier",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "support type",
+          "in" : "path",
+          "description" : "type of support needed",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "support request acknowledged"
+          },
+          "400" : {
+            "description" : "Bad request (invalid query or body parameters)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization error (invalid API key)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The booking was not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/support_status/{id}" : {
+      "get" : {
+        "tags" : [ "support" ],
+        "description" : "identifies the current status of the support request",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Booking identifier",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "support status delivered",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/supportStatus"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request (invalid query or body parameters)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization error (invalid API key)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The booking was not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "system_information" : {
+        "required" : [ "language", "name", "system_id", "timezone", "type_of_system" ],
+        "properties" : {
+          "system_id" : {
+            "type" : "string",
+            "description" : "identifier for this transport system. This should be globally unique (even between different systems)"
+          },
+          "language" : {
+            "type" : "string",
+            "description" : "An IETF language tag indicating the language that will be used throughout the rest of the files. This is a string that defines a single language tag only.",
+            "format" : "ietf"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Full name of the system to be displayed to customers"
+          },
+          "short_name" : {
+            "type" : "string",
+            "description" : "Optional abbreviation for a system"
+          },
+          "operator" : {
+            "type" : "string",
+            "description" : "Name of the operator of the system"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "The URL of the transport operator. The value must be a fully qualified URL that includes http:// or https://, and any special characters in the URL must be correctly escaped."
+          },
+          "purchase_url" : {
+            "type" : "string",
+            "description" : "A fully qualified URL where a customer can purchase a membership or learn more about purchasing memberships"
+          },
+          "start_date" : {
+            "type" : "string",
+            "description" : "String in the form YYYY-MM-DD representing the date that the system began operations",
+            "format" : "date"
+          },
+          "phone_number" : {
+            "type" : "string",
+            "description" : "A single voice telephone number for the specified system. This field is a string value that presents the telephone number as typical for the system's service area. It can and should contain punctuation marks to group the digits of the number."
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "A single contact email address for customers to address questions about the system",
+            "format" : "email"
+          },
+          "timezone" : {
+            "type" : "string",
+            "description" : "The time zone where the system is located. Time zone names never contain the space character but may contain an underscore. Please refer to the \"TZ\" value in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for a list of valid values"
+          },
+          "license_url" : {
+            "type" : "string",
+            "description" : "A fully qualified URL of a page that defines the license terms for the GBFS data for this system, as well as any other license terms the system would like to define (including the use of corporate trademarks, etc)"
+          },
+          "type_of_system" : {
+            "type" : "string",
+            "description" : "Describes the type of system",
+            "enum" : [ "free_floating", "station_based", "virtual_station_based" ]
+          }
+        },
+        "description" : "operation successful"
+      },
+      "station_information" : {
+        "required" : [ "lat", "lon", "name", "station_id", "stations" ],
+        "properties" : {
+          "stations" : {
+            "$ref" : "#/components/schemas/station_information_stations"
+          }
+        }
+      },
+      "system_hours" : {
+        "required" : [ "days", "end_time", "rental_hours", "start_time", "user_types" ],
+        "properties" : {
+          "rental_hours" : {
+            "$ref" : "#/components/schemas/system_hours_rental_hours"
+          }
+        }
+      },
+      "free_asset_status" : {
+        "required" : [ "asset_id", "assets", "is_disabled", "is_reserved", "place", "pricing" ],
+        "properties" : {
+          "assets" : {
+            "$ref" : "#/components/schemas/free_asset_status_assets"
+          }
+        }
+      },
+      "system_calendar" : {
+        "required" : [ "calendars", "end_day", "end_month", "start_day", "start_month" ],
+        "properties" : {
+          "calendars" : {
+            "$ref" : "#/components/schemas/system_calendar_calendars"
+          }
+        }
+      },
+      "system_regions" : {
+        "required" : [ "name", "region_id", "regions" ],
+        "properties" : {
+          "regions" : {
+            "$ref" : "#/components/schemas/system_regions_regions"
+          }
+        }
+      },
+      "system_pricing_plans" : {
+        "required" : [ "currency", "description", "is_taxable", "name", "plan_id", "plans", "price" ],
+        "properties" : {
+          "plans" : {
+            "$ref" : "#/components/schemas/system_pricing_plans_plans"
+          }
+        }
+      },
+      "type_of_asset" : {
+        "required" : [ "name", "type_id" ],
+        "properties" : {
+          "type_id" : {
+            "type" : "string",
+            "description" : "unique identifier of a type"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "name of asset type"
+          },
+          "allowed_to_travel_abroad" : {
+            "type" : "boolean",
+            "description" : "true indicates asset is allowed to travel abroad"
+          },
+          "airconditioning" : {
+            "type" : "boolean",
+            "description" : "true indicates airconditioning required"
+          },
+          "asset_class" : {
+            "type" : "string",
+            "description" : "classification of the asset"
+          },
+          "brand" : {
+            "type" : "string",
+            "description" : "brand of the asset"
+          },
+          "cabrio" : {
+            "type" : "boolean",
+            "description" : "true indicates cabrio required"
+          },
+          "colour" : {
+            "type" : "string",
+            "description" : "colour of the asset"
+          },
+          "cargo" : {
+            "type" : "string",
+            "description" : "describes options to carry cargo"
+          },
+          "easy_accessibility" : {
+            "type" : "string",
+            "description" : "describes if asset needs to be easily accessible",
+            "enum" : [ "lift", "escalator", "ground level" ]
+          },
+          "gears" : {
+            "type" : "integer",
+            "description" : "number of gears of the asset",
+            "format" : "int32"
+          },
+          "gearbox" : {
+            "type" : "string",
+            "description" : "type of gearbox",
+            "enum" : [ "manual", "automatic", "semi-automatic" ]
+          },
+          "image" : {
+            "type" : "string",
+            "format" : "url"
+          },
+          "infant_seat" : {
+            "type" : "boolean",
+            "description" : "true indicates infant seat required"
+          },
+          "persons" : {
+            "type" : "integer",
+            "description" : "number of persons able to use the asset",
+            "format" : "int32"
+          },
+          "pets" : {
+            "type" : "boolean",
+            "description" : "true indicates pets are allowed on asset"
+          },
+          "propulsion" : {
+            "type" : "string",
+            "description" : "way in which the asset is powered",
+            "enum" : [ "muscle", "electric", "gasoline", "diesel", "hybrid", "LPG", "hydrogen" ]
+          },
+          "smoking" : {
+            "type" : "boolean",
+            "description" : "true indicates smoking is allowed on asset"
+          },
+          "state_of_charge" : {
+            "maximum" : 100,
+            "minimum" : 0,
+            "type" : "integer",
+            "description" : "percentage of charge available",
+            "format" : "int32"
+          },
+          "towing_hook" : {
+            "type" : "boolean",
+            "description" : "true indicates towing hook required"
+          },
+          "underground_parking" : {
+            "type" : "boolean",
+            "description" : "true indicates underground parking is allowed with asset"
+          },
+          "winter_tires" : {
+            "type" : "boolean",
+            "description" : "true indicates winter tires required"
+          },
+          "other" : {
+            "type" : "string",
+            "description" : "free text to describe asset"
+          }
+        }
+      },
+      "system_alerts" : {
+        "required" : [ "alert_id", "alerts", "start", "summary", "type" ],
+        "properties" : {
+          "alerts" : {
+            "$ref" : "#/components/schemas/system_alerts_alerts"
+          }
+        }
+      },
+      "error" : {
+        "required" : [ "code", "message" ],
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string",
+            "description" : "A human readable error message (preferrably in English)"
+          },
+          "code" : {
+            "type" : "string",
+            "description" : "A TSP internal error code, used for reference"
+          }
+        },
+        "description" : "An error that the service may send, e.g. in case of invalid input, missing authorization or internal service error."
+      },
+      "newBooking" : {
+        "required" : [ "customer", "leg" ],
+        "type" : "object",
+        "properties" : {
+          "state" : {
+            "type" : "string",
+            "description" : "The state of the booking (always new for new bookings)",
+            "enum" : [ "NEW" ]
+          },
+          "leg" : {
+            "$ref" : "#/components/schemas/leg"
+          },
+          "customer" : {
+            "$ref" : "#/components/schemas/customer"
+          }
+        },
+        "description" : "A new booking, created by MaaS POST request in 'new' state"
+      },
+      "booking" : {
+        "required" : [ "customer", "id", "leg", "state", "token" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The identifier MaaS will be using to referring to the booking"
+          },
+          "state" : {
+            "$ref" : "#/components/schemas/bookingState"
+          },
+          "terms" : {
+            "$ref" : "#/components/schemas/bookingState"
+          },
+          "token" : {
+            "$ref" : "#/components/schemas/token"
+          },
+          "meta" : {
+            "type" : "object",
+            "description" : "Arbitrary metadata that a TSP can add"
+          }
+        },
+        "description" : "The booking information describing the state and details of the transaction",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/newBooking"
+        } ]
+      },
+      "bookingState" : {
+        "type" : "string",
+        "description" : "The life-cycle state of the booking (from NEW to FINISHED)",
+        "enum" : [ "NEW", "BOOKED", "CANCELLED", "PAID", "UPDATE_REQUESTED", "UPDATED", "STARTED", "FINISHED" ]
+      },
+      "token" : {
+        "properties" : {
+          "validityDuration" : {
+            "$ref" : "#/components/schemas/token_validityDuration"
+          },
+          "meta" : {
+            "type" : "object",
+            "description" : "Arbitrary metadata the TSP may pass along the ticket to the client (e.g. a booking code, base64 encoded binary)"
+          }
+        },
+        "description" : "The validity token (such as booking ID, travel ticket etc.) that MaaS clients will display to validate the trip when starting the leg."
+      },
+      "customer" : {
+        "required" : [ "firstName", "id", "lastName" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The identifier MaaS uses to identify the customer"
+          },
+          "firstName" : {
+            "type" : "string",
+            "description" : "First name of the customer (e.g. John)"
+          },
+          "lastName" : {
+            "type" : "string",
+            "description" : "Last name of the customer (e.g. Doe)"
+          },
+          "phone" : {
+            "type" : "string",
+            "description" : "Phone number that the customer may be reached from"
+          }
+        }
+      },
+      "options" : {
+        "type" : "object",
+        "properties" : {
+          "leg" : {
+            "$ref" : "#/components/schemas/options_leg"
+          },
+          "meta" : {
+            "$ref" : "#/components/schemas/type_of_asset"
+          }
+        },
+        "description" : "Containing an array of available options matching the query"
+      },
+      "options_leg" : {
+        "type" : "object",
+        "properties" : {
+          "startTime" : {
+            "$ref" : "#/components/schemas/time"
+          },
+          "endTime" : {
+            "$ref" : "#/components/schemas/time"
+          },
+          "from" : {
+            "$ref" : "#/components/schemas/options_coordinates"
+          },
+          "to" : {
+            "$ref" : "#/components/schemas/options_coordinates"
+          }
+        }
+      },
+      "options_coordinates" : {
+        "type" : "object",
+        "properties" : {
+          "lat" : {
+            "$ref" : "#/components/schemas/lat"
+          },
+          "lon" : {
+            "$ref" : "#/components/schemas/lon"
+          }
+        }
+      },
+      "options_meta" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "image" : {
+            "type" : "string",
+            "format" : "url"
+          },
+          "asset" : {
+            "$ref" : "#/components/schemas/options_meta_asset"
+          }
+        },
+        "description" : "replaced with type_of_asset",
+        "deprecated" : true
+      },
+      "leg" : {
+        "required" : [ "endTime", "from", "mode", "startTime", "to" ],
+        "type" : "object",
+        "properties" : {
+          "from" : {
+            "$ref" : "#/components/schemas/place"
+          },
+          "to" : {
+            "$ref" : "#/components/schemas/place"
+          },
+          "startTime" : {
+            "$ref" : "#/components/schemas/time"
+          },
+          "endTime" : {
+            "$ref" : "#/components/schemas/time"
+          },
+          "mode" : {
+            "$ref" : "#/components/schemas/mode"
+          },
+          "departureDelay" : {
+            "$ref" : "#/components/schemas/duration"
+          },
+          "arrivalDelay" : {
+            "$ref" : "#/components/schemas/duration"
+          },
+          "distance" : {
+            "$ref" : "#/components/schemas/distance"
+          },
+          "fare" : {
+            "$ref" : "#/components/schemas/fare"
+          },
+          "route" : {
+            "type" : "string"
+          },
+          "routeShortName" : {
+            "type" : "string"
+          },
+          "routeLongName" : {
+            "type" : "string"
+          },
+          "agencyId" : {
+            "type" : "string"
+          },
+          "legGeometry" : {
+            "$ref" : "#/components/schemas/legGeometry"
+          }
+        },
+        "additionalProperties" : true,
+        "description" : "A OpenTripPlanner compatible definition of a leg (see OpenTripPlanner docs for reference)"
+      },
+      "place" : {
+        "required" : [ "lat", "lon" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "Human readable name of the place"
+          },
+          "stopId" : {
+            "type" : "string"
+          },
+          "stopCode" : {
+            "type" : "string"
+          },
+          "lat" : {
+            "$ref" : "#/components/schemas/lat"
+          },
+          "lon" : {
+            "$ref" : "#/components/schemas/lon"
+          }
+        },
+        "additionalProperties" : true
+      },
+      "lat" : {
+        "maximum" : 90,
+        "minimum" : -90,
+        "type" : "number",
+        "description" : "The field value must be a valid WGS84 latitude in decimal degrees format."
+      },
+      "lon" : {
+        "maximum" : 180,
+        "minimum" : -180,
+        "type" : "number",
+        "description" : "The field value must be a valid WGS84 longitude in decimal degrees format."
+      },
+      "legGeometry" : {
+        "type" : "object",
+        "properties" : {
+          "points" : {
+            "minLength" : 1,
+            "type" : "string"
+          }
+        },
+        "additionalProperties" : true
+      },
+      "time" : {
+        "description" : "A UTC timestamp (number of milliseconds in a Date object since January 1, 1970, 00:00:00)"
+      },
+      "duration" : {
+        "maximum" : 2147483647,
+        "minimum" : 0,
+        "type" : "integer",
+        "description" : "A duration of some time (relative to time) in milliseconds",
+        "format" : "int32"
+      },
+      "distance" : {
+        "minimum" : 0,
+        "type" : "integer",
+        "description" : "The estimated distance travelled in the leg (in meters)",
+        "format" : "int32"
+      },
+      "fare" : {
+        "type" : "number",
+        "description" : "fare price for specific leg request [amended from MaaS-API] This should be in the base unit as defined by the ISO 4217 currency code with the appropriate number of decimal places and omitting the currency symbol. e.g. if the price is in US Dollars the price would be 9.95"
+      },
+      "mode" : {
+        "description" : "The type of the leg MaaS uses to identify the leg"
+      },
+      "notification" : {
+        "type" : "string",
+        "description" : "notifies the MaaS operator of issues with a booking [addendum]",
+        "enum" : [ "vehicle_not_available", "user_noshow" ]
+      },
+      "monitor" : {
+        "required" : [ "distance", "duration", "lat", "lon" ],
+        "type" : "string",
+        "properties" : {
+          "lat" : {
+            "$ref" : "#/components/schemas/lat"
+          },
+          "lon" : {
+            "$ref" : "#/components/schemas/lon"
+          },
+          "duration" : {
+            "$ref" : "#/components/schemas/duration"
+          },
+          "distance" : {
+            "$ref" : "#/components/schemas/distance"
+          }
+        },
+        "description" : "provides current asset location & duration and distance of the current leg"
+      },
+      "supportStatus" : {
+        "type" : "string",
+        "description" : "the current status of support",
+        "enum" : [ "PROCESSING", "UPDATE_REQUESTED", "RESOLVED", "CANCELLED" ]
+      },
+      "station_information_stations" : {
+        "type" : "object",
+        "properties" : {
+          "station_id" : {
+            "type" : "string",
+            "description" : "unique identifier of a station"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "public name of the station"
+          },
+          "lat" : {
+            "$ref" : "#/components/schemas/lat"
+          },
+          "lon" : {
+            "$ref" : "#/components/schemas/lon"
+          },
+          "address" : {
+            "type" : "string",
+            "description" : "Valid street number and name where station is located. This field is intended to be an actual address, not a free form text description (see \"cross_street\")"
+          },
+          "cross_street" : {
+            "type" : "string",
+            "description" : "Cross street of where the station is located. This field is intended to be a descriptive field for human consumption. In cities, this would be a cross street, but could also be a description of a location in a park, etc."
+          },
+          "region_id" : {
+            "type" : "string",
+            "description" : "ID of the region where the station is located (see \"system_regions\")"
+          },
+          "post_code" : {
+            "type" : "string",
+            "description" : "Postal code where station is located"
+          },
+          "rental_methods" : {
+            "type" : "array",
+            "description" : "Array of enumerables containing the payment methods accepted at this station.",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "key", "creditcard", "paypass", "applepay", "androidpay", "transitcard", "accountnumber", "phone" ]
+            }
+          },
+          "rental_url" : {
+            "type" : "string",
+            "format" : "URL"
+          }
+        },
+        "description" : "Array that contains one object per station in the system as defined below"
+      },
+      "system_hours_rental_hours" : {
+        "type" : "object",
+        "properties" : {
+          "user_types" : {
+            "type" : "array",
+            "description" : "An array of \"member\" and \"nonmember\" values. This indicates that this set of rental hours applies to either members or non-members only.",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "days" : {
+            "type" : "array",
+            "description" : "An array of abbreviations (first 3 letters) of English names of the days of the week that this hour object applies to (i.e. [\"mon\", \"tue\"]). Each day can only appear once within all of the hours objects in this feed.",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "startTime" : {
+            "$ref" : "#/components/schemas/time"
+          },
+          "endTime" : {
+            "$ref" : "#/components/schemas/time"
+          }
+        },
+        "description" : "Array of hour objects as defined below. Can contain a minimum of one object identifying hours for all days of the week or a maximum of fourteen hour objects are allowed (one for each day of the week for each \"member\" or \"nonmember\" user type)"
+      },
+      "free_asset_status_assets" : {
+        "type" : "object",
+        "properties" : {
+          "asset_id" : {
+            "type" : "string",
+            "description" : "unique identifier of an asset"
+          },
+          "place" : {
+            "$ref" : "#/components/schemas/place"
+          },
+          "is_reserved" : {
+            "type" : "integer",
+            "description" : "1/0 value - is the bike currently reserved for someone else",
+            "format" : "int32",
+            "enum" : [ 0, 1 ]
+          },
+          "is_disabled" : {
+            "type" : "integer",
+            "description" : "1/0 value - is the bike currently disabled (broken)",
+            "format" : "int32",
+            "enum" : [ 0, 1 ]
+          },
+          "pricing" : {
+            "$ref" : "#/components/schemas/fare"
+          },
+          "rental_url" : {
+            "type" : "string",
+            "description" : "deep-linking option from GBFS+",
+            "format" : "URL"
+          }
+        },
+        "description" : "Array that contains one object per asset that is currently docked/stopped outside of the system as defined below"
+      },
+      "system_calendar_calendars" : {
+        "type" : "object",
+        "properties" : {
+          "start_month" : {
+            "maximum" : 12,
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "Starting month for the system operations (1-12)",
+            "format" : "int32"
+          },
+          "start_day" : {
+            "maximum" : 31,
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "Starting day for the system operations (1-31)",
+            "format" : "int32"
+          },
+          "start_year" : {
+            "type" : "integer",
+            "description" : "Starting year for the system operations",
+            "format" : "int32"
+          },
+          "end_month" : {
+            "maximum" : 12,
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "Ending month for the system operations (1-12)",
+            "format" : "int32"
+          },
+          "end_day" : {
+            "maximum" : 31,
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "Ending day for the system operations (1-31)",
+            "format" : "int32"
+          },
+          "end_year" : {
+            "type" : "integer",
+            "description" : "Ending year for the system operations",
+            "format" : "int32"
+          }
+        },
+        "description" : "Array of year objects describing the system operational calendar. A minimum of one calendar object is required, which could indicate a general calendar, or multiple calendars could be present indicating arbitrary start and end dates"
+      },
+      "system_regions_regions" : {
+        "type" : "object",
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "Unique identifier for this region"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Public name for this region"
+          }
+        },
+        "description" : "Array of region objects as defined below"
+      },
+      "system_pricing_plans_plans" : {
+        "type" : "object",
+        "properties" : {
+          "plan_id" : {
+            "type" : "string",
+            "description" : "a unique identifier for this plan in the system"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "a fully qualified URL where the customer can learn more about this particular scheme"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "name of this pricing scheme"
+          },
+          "currency" : {
+            "type" : "string",
+            "description" : "currency this pricing is in",
+            "format" : "iso_4217"
+          },
+          "fare" : {
+            "$ref" : "#/components/schemas/fare"
+          },
+          "is_taxable" : {
+            "type" : "integer",
+            "description" : "0 indicates that no additional tax will be added (either because tax is not charged, or because it is included) 1 indicates that tax will be added to the base price",
+            "format" : "int32",
+            "enum" : [ 0, 1 ]
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Text field describing the particular pricing plan in human readable terms. This should include the duration, price, conditions, etc. that the publisher would like users to see. This is intended to be a human-readable description and should not be used for automatic calculations"
+          }
+        },
+        "description" : "Array of any number of plan objects as defined below"
+      },
+      "system_alerts_alerts" : {
+        "type" : "object",
+        "properties" : {
+          "alert_id" : {
+            "type" : "string",
+            "description" : "a unique identifier for this alert"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "SYSTEM_CLOSURE", "STATION_CLOSURE", "STATION_MOVE", "OTHER" ]
+          },
+          "times" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "properties" : {
+                "start" : {
+                  "type" : "integer",
+                  "description" : "Integer POSIX timestamp - required if container \"times\" key is present",
+                  "format" : "POSIX"
+                },
+                "end" : {
+                  "type" : "integer",
+                  "description" : "Integer POSIX timestamp - if there is currently no end time planned for the alert, this key can be omitted indicating that there is no currently scheduled end time for the alert",
+                  "format" : "POSIX"
+                }
+              },
+              "description" : "Array of hashes with the keys \"start\" and \"end\" indicating when the alert is in effect (e.g. when the system or station is actually closed, or when it is scheduled to be moved). If this array is omitted then the alert should be displayed as long as it is in the feed."
+            }
+          },
+          "station_ids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "Array of strings - If this is an alert that affects one or more stations, include their ids, otherwise omit this field. If both station_ids and region_ids are omitted, assume this alert affects the entire system"
+            }
+          },
+          "regions_ids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "Array of strings - If this system has regions, and if this alert only affects certain regions, include their ids, otherwise, omit this field. If both station_ids and region_ids are omitted, assume this alert affects the entire system"
+            }
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "URL where the customer can learn more information about this alert, if there is one",
+            "format" : "hostname"
+          },
+          "summary" : {
+            "type" : "string",
+            "description" : "A short summary of this alert to be displayed to the customer"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Detailed text description of the alert"
+          },
+          "last_updated" : {
+            "type" : "integer",
+            "description" : "Integer POSIX timestamp indicating the last time the info for the particular alert was updated",
+            "format" : "POSIX"
+          }
+        },
+        "description" : "Array - alert objects each indicating a separate system alert as defined below"
+      },
+      "token_validityDuration" : {
+        "type" : "object",
+        "properties" : {
+          "from" : {
+            "$ref" : "#/components/schemas/time"
+          },
+          "to" : {
+            "$ref" : "#/components/schemas/time"
+          }
+        },
+        "description" : "The rules that MaaS will interpret to schedule, -validate or cancel the booking."
+      },
+      "options_meta_asset" : {
+        "type" : "object",
+        "properties" : {
+          "passengers" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "key" : {
+        "type" : "apiKey",
+        "description" : "MaaS can authenticate using an access token as part of the HTTP(S) headers. The keys are sent as part of every request that MaaS makes to the TSP API with a `x-api-key` custom header option. [from MaaS-API]",
+        "name" : "X-Api-Key",
+        "in" : "header"
+      }
+    },
+    "links" : { },
+    "callbacks" : { }
+  }
+}
